@@ -448,12 +448,12 @@ def build_demo_report_markdown(
     allocation = format_metric(summary.get("mean_allocation"), digits=2) if summary else "尚未运行"
 
     lines = [
-        "# O2Cache 演示报告摘要",
+        "# 演示报告摘要",
         "",
         "## 项目信息",
         "",
         "- 项目名称：应急智枢：面向灾害响应的算力动态优化与云边协同系统",
-        "- 团队名称：O₂Cache",
+        "- 团队名称：本团队",
         "- 平台定位：基于历史案例库与上下文学习的应急服务资源缓存预测平台",
         "",
         "## 本次演示数据",
@@ -728,7 +728,7 @@ def render_overview():
     st.markdown(
         """
 <div class="hero-band">
-  <div class="hero-eyebrow">O₂Cache</div>
+  <div class="hero-eyebrow">应急智枢</div>
   <div class="hero-title">应急智枢：面向灾害响应的算力动态优化与云边协同系统</div>
   <div class="hero-subtitle">基于历史案例库与上下文学习的应急服务资源缓存预测平台</div>
   <div class="hero-copy">本平台面向灾害响应场景下的多模态智能服务请求，展示如何通过历史案例库、相似案例检索和上下文学习机制，预测下一时隙资源缓存量，为模型实例预热、GPU/显存预留和并发资源分配提供辅助决策。</div>
@@ -1264,7 +1264,7 @@ def render_case_library():
     with tab3:
         st.dataframe(ui_frame(case_display_df), use_container_width=True)
         csv = ui_frame(case_display_df).to_csv(index=False, encoding="utf-8-sig")
-        st.download_button("导出历史案例表", csv, file_name="O2Cache_历史案例表.csv", mime="text/csv")
+        st.download_button("导出历史案例表", csv, file_name="演示_历史案例表.csv", mime="text/csv")
 
 
 def render_retrieval():
@@ -1473,7 +1473,7 @@ def render_prediction():
         st.subheader("逐步结果表")
         decision_df = decision_export_frame(display_tdf)
         st.dataframe(decision_df, use_container_width=True)
-        st.download_button("导出运行结果", decision_df.to_csv(index=False, encoding="utf-8-sig"), file_name="O2Cache_运行结果.csv", mime="text/csv")
+        st.download_button("导出运行结果", decision_df.to_csv(index=False, encoding="utf-8-sig"), file_name="演示_运行结果.csv", mime="text/csv")
 
 
 def render_step_explanation():
@@ -1556,24 +1556,24 @@ def render_result_replay():
             cols[2].metric("平均资源冗余率", f"{summary.get('mean_waste_rate', 0):.3f}")
             cols[3].metric("平均资源缓存量", f"{summary.get('mean_allocation', 0):.2f}")
             st.dataframe(decision_df.head(80), use_container_width=True)
-            st.download_button("导出运行结果", decision_df.to_csv(index=False, encoding="utf-8-sig"), file_name="O2Cache_运行结果.csv", mime="text/csv")
+            st.download_button("导出运行结果", decision_df.to_csv(index=False, encoding="utf-8-sig"), file_name="演示_运行结果.csv", mime="text/csv")
 
             explanation_cols = ["t", "game_name", "access_key_id", "current_arrivals", "allocation", "reward", "hit_rate", "waste_rate", "action_source", "retrieved_case_ids"]
             explanation_df = tdf[[c for c in explanation_cols if c in tdf.columns]].copy()
             explanation_df = decision_export_frame(explanation_df)
-            st.download_button("导出单步决策解释", explanation_df.to_csv(index=False, encoding="utf-8-sig"), file_name="O2Cache_单步决策解释.csv", mime="text/csv")
+            st.download_button("导出单步决策解释", explanation_df.to_csv(index=False, encoding="utf-8-sig"), file_name="演示_单步决策解释.csv", mime="text/csv")
 
     st.subheader("策略对比结果")
     comp_df = comparison_export_frame(comparison_rows)
     if not comp_df.empty:
         st.dataframe(comp_df, use_container_width=True, hide_index=True)
-        st.download_button("导出策略对比结果", comp_df.to_csv(index=False, encoding="utf-8-sig"), file_name="O2Cache_策略对比结果.csv", mime="text/csv")
+        st.download_button("导出策略对比结果", comp_df.to_csv(index=False, encoding="utf-8-sig"), file_name="演示_策略对比结果.csv", mime="text/csv")
     else:
         st.info("尚未生成策略对比结果。可在“调度效果评估”页面点击“生成策略对比”。")
 
     if result is not None:
         report_md = build_demo_report_markdown(result=result, comparison_rows=comparison_rows, df_req=df_req, lib=lib)
-        st.download_button("生成演示报告摘要", report_md, file_name="O2Cache_演示报告摘要.md", mime="text/markdown")
+        st.download_button("生成演示报告摘要", report_md, file_name="演示_报告摘要.md", mime="text/markdown")
     else:
         st.info("运行一次 ICL 缓存决策后，可以生成包含本次指标的演示报告摘要。")
 
@@ -1583,7 +1583,7 @@ def render_result_replay():
             st.download_button(
                 "导出指标摘要",
                 json.dumps({ui_col(k): v for k, v in summary.items()}, ensure_ascii=False, indent=2),
-                file_name="O2Cache_指标摘要.json",
+                file_name="演示_指标摘要.json",
                 mime="application/json",
             )
 
@@ -1591,7 +1591,7 @@ def render_result_replay():
         try:
             load_df = task_load_export_frame(df_req)
             st.subheader("任务负载曲线")
-            st.download_button("导出任务负载数据", load_df.to_csv(index=False, encoding="utf-8-sig"), file_name="O2Cache_任务负载数据.csv", mime="text/csv")
+            st.download_button("导出任务负载数据", load_df.to_csv(index=False, encoding="utf-8-sig"), file_name="演示_任务负载数据.csv", mime="text/csv")
             if px:
                 fig = px.line(load_df, x="时间步", y="请求到达量", color="任务序列", title="任务负载曲线")
                 style_figure(fig, height=360)
@@ -1602,7 +1602,7 @@ def render_result_replay():
     case_df = case_export_frame(lib)
     if not case_df.empty:
         st.subheader("历史案例库辅助材料")
-        st.download_button("导出历史案例表", case_df.to_csv(index=False, encoding="utf-8-sig"), file_name="O2Cache_历史案例表.csv", mime="text/csv")
+        st.download_button("导出历史案例表", case_df.to_csv(index=False, encoding="utf-8-sig"), file_name="演示_历史案例表.csv", mime="text/csv")
 
     st.subheader("演示材料辅助文件")
     st.write("可将上述导出结果用于整理评审演示中的任务负载曲线、策略对比结果、单步决策解释表和演示报告摘要。")
@@ -1629,7 +1629,7 @@ pages = {
 }
 
 with st.sidebar:
-    st.header("O₂Cache")
+    st.header("应急智枢")
     st.subheader("应急智枢")
     st.caption("ICL资源缓存预测演示平台")
     page = st.radio("导航", list(pages.keys()))
